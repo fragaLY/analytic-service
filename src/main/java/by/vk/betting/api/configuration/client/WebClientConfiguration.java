@@ -4,7 +4,6 @@ import by.vk.betting.api.analytic.service.AnalyticService;
 import by.vk.betting.api.configuration.client.properties.WebClientProperties;
 import by.vk.betting.api.configuration.exception.types.UnexpectedException;
 import io.netty.channel.ChannelOption;
-import io.netty.handler.timeout.ReadTimeoutException;
 import io.netty.handler.timeout.ReadTimeoutHandler;
 import io.netty.handler.timeout.WriteTimeoutHandler;
 import org.slf4j.Logger;

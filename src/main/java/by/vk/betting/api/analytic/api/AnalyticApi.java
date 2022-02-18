@@ -9,19 +9,18 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class AnalyticApi implements Api {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(AnalyticApi.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(AnalyticApi.class);
 
-    private final AnalyticService service;
+  private final AnalyticService service;
 
-    public AnalyticApi(AnalyticService service) {
-        this.service = service;
-    }
+  public AnalyticApi(AnalyticService service) {
+    this.service = service;
+  }
 
-    @Override
-    public ResponseEntity<Void> get() {
-        LOGGER.info("[ANALYTIC] Retrieving analytic for historical data");
-        service.get();
-        return ResponseEntity.ok().build();
-    }
-
+  @Override
+  public ResponseEntity<Void> get() {
+    LOGGER.info("[ANALYTIC] Retrieving analytic for historical data");
+    service.get();
+    return ResponseEntity.ok().build();
+  }
 }

@@ -2,29 +2,25 @@ package by.vk.betting.api.configuration.exception.handler;
 
 import by.vk.betting.api.configuration.exception.ExceptionInformation;
 import by.vk.betting.api.configuration.exception.types.BadRequestException;
-import by.vk.betting.api.configuration.exception.types.ForbiddenException;
 import by.vk.betting.api.configuration.exception.types.NotFoundException;
 import by.vk.betting.api.configuration.exception.types.UnexpectedException;
-import io.netty.handler.timeout.ReadTimeoutException;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import org.springframework.web.reactive.function.client.WebClientRequestException;
 
-import javax.validation.ConstraintViolation;
-import javax.validation.ConstraintViolationException;
 import java.util.stream.Collectors;
 
-import static org.springframework.http.HttpStatus.*;
+import static org.springframework.http.HttpStatus.BAD_REQUEST;
+import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
+import static org.springframework.http.HttpStatus.NOT_FOUND;
 
 @RestControllerAdvice
 public class CommonExceptionHandler {
 
-  @ExceptionHandler(
-      value = {IllegalArgumentException.class, IllegalStateException.class})
+  @ExceptionHandler(value = {IllegalArgumentException.class, IllegalStateException.class})
   @ResponseStatus(value = BAD_REQUEST)
   public ExceptionInformation handleIllegalArgumentExcception(IllegalArgumentException exception) {
     return new ExceptionInformation(BAD_REQUEST, BAD_REQUEST.value(), exception.getMessage());
@@ -65,26 +61,5 @@ public class CommonExceptionHandler {
   public ExceptionInformation handleHttpMessageNotReadableException(
       HttpMessageNotReadableException exception) {
     return new ExceptionInformation(BAD_REQUEST, BAD_REQUEST.value(), exception.getMessage());
-  }
-
-  @ExceptionHandler(value = {ForbiddenException.class})
-  @ResponseStatus(value = FORBIDDEN)
-  public ExceptionInformation handleForbiddenException(ForbiddenException exception) {
-    var message =
-        exception.getMessage() != null && !exception.getMessage().isBlank()
-            ? exception.getMessage()
-            : "Forbidden.";
-    return new ExceptionInformation(FORBIDDEN, FORBIDDEN.value(), message);
-  }
-
-  @ExceptionHandler(value = {ConstraintViolationException.class})
-  @ResponseStatus(value = BAD_REQUEST)
-  public ExceptionInformation handleConstraintViolationException(
-      ConstraintViolationException exception) {
-    var message =
-        exception.getConstraintViolations().stream()
-            .map(ConstraintViolation::getMessage)
-            .collect(Collectors.joining(", "));
-    return new ExceptionInformation(BAD_REQUEST, BAD_REQUEST.value(), message);
   }
 }
