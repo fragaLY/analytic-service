@@ -65,7 +65,7 @@ betting:
     timeout: 5000
     max-attempts: 5
     duration: 1
-    baseurl: "http://ec2-3-123-232-146.eu-central-1.compute.amazonaws.com:8000/soccer"
+    baseurl: ${WEBCLIENT_BASEURL:localhost}
     segments:
       - "/2000"
       - "/2001"
