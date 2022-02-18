@@ -4,8 +4,6 @@ import by.vk.betting.api.analytic.dto.exposed.ExposedResponse;
 import by.vk.betting.api.configuration.client.properties.WebClientProperties;
 import by.vk.betting.api.configuration.exception.function.ClientErrorFunction;
 import by.vk.betting.api.configuration.exception.types.NotFoundException;
-import by.vk.betting.api.configuration.exception.types.UnexpectedException;
-import io.netty.handler.timeout.ReadTimeoutException;
 import org.apache.logging.log4j.util.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,9 +12,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
 import reactor.util.retry.RetryBackoffSpec;
-
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
 
 @Service
 public record AnalyticService(WebClientProperties properties,

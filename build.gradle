@@ -5,6 +5,7 @@ plugins {
 	id "org.springframework.boot" version "2.6.3"
 	id "io.spring.dependency-management" version "1.0.11.RELEASE"
 	id "com.google.cloud.tools.jib" version "3.2.0"
+	id "com.moowork.node" version "1.3.1"
 }
 
 group = "by.vk.betting.api"
@@ -28,47 +29,26 @@ springBoot {
 	buildInfo()
 }
 
-sourceSets {
-	test {
-		java.srcDirs("src/test/unit/java")
-		resources.srcDir("src/test/unit/resources")
-	}
-
-	integrationTest {
-		compileClasspath += sourceSets.main.output
-		compileClasspath += sourceSets.test.output
-		runtimeClasspath += sourceSets.main.output
-		runtimeClasspath += sourceSets.test.output
-		java.srcDirs("src/test/integration/java")
-		resources.srcDirs("src/test/integration/resources")
-	}
-}
-
 java {
 	sourceCompatibility = JavaVersion.VERSION_17
 	targetCompatibility = JavaVersion.VERSION_17
 }
 
-test {
-	useJUnitPlatform()
+node {
+	version = "16.9.0"
+	distBaseUrl = "https://nodejs.org/dist"
+	download = false
+	npmWorkDir = file("build/nodejs/")
+	nodeModulesDir = file("frontend/")
 }
 
-task integrationTest(type: Test) {
-	group = 'verification'
-	testClassesDirs = sourceSets.integrationTest.output.classesDirs
-	classpath = sourceSets.integrationTest.runtimeClasspath
-	useJUnitPlatform()
+task npmBuild(type: NodeTask) {
+	dependsOn(npmInstall)
+	workingDir = file("frontend/")
+	args = ["run", "build"]
 }
 
-check.dependsOn integrationTest
-integrationTest.mustRunAfter test
-
-idea {
-	module {
-		testSourceDirs += project.sourceSets.integrationTest.java.srcDirs
-		testSourceDirs += project.sourceSets.integrationTest.resources.srcDirs
-	}
-}
+processResources.dependsOn npmBuild
 
 configurations {
 	compileOnly {
@@ -86,61 +66,18 @@ repositories {
 
 ext {
 	set("logbackVersion", "0.1.5")
-	set("testcontainersVersion", "1.16.3")
-	set("sparkStreamingVersion", "3.2.1")
 }
 
 dependencies {
 	//region spring
-	implementation("org.springframework.boot:spring-boot-starter-validation")
 	implementation("org.springframework.boot:spring-boot-starter-undertow")
 	implementation("org.springframework.boot:spring-boot-starter-web")
 	implementation("org.springframework.boot:spring-boot-starter-actuator")
 	implementation("org.springframework.boot:spring-boot-starter-webflux")
-	implementation("org.apache.spark:spark-streaming_2.12:${sparkStreamingVersion}")
 	//endregion
 
 	//region logback
 	implementation("ch.qos.logback.contrib:logback-json-classic:${logbackVersion}")
 	implementation("ch.qos.logback.contrib:logback-jackson:${logbackVersion}")
 	//endregion
-
-	//region test
-	testImplementation("org.springframework.boot:spring-boot-starter-test")
-	testImplementation("org.testcontainers:postgresql:${testcontainersVersion}")
-	testImplementation("org.testcontainers:junit-jupiter:${testcontainersVersion}")
-	//endregion
-}
-
-jib {
-	from {
-		image = System.getenv("DOCKER_BASE_IMAGE") //gcr.io/distroless/java17-debian11
-	}
-	to {
-		image = System.getenv("DOCKER_TO_IMAGE") // gcr.io/PROJECT/IMAGE
-		auth {
-			username = "oauth2accesstoken"
-			password = "gcloud auth print-access-token".execute().text.trim()
-		}
-		tags = ["$version", "latest"]
-	}
-	container {
-		jvmFlags = ["-Xss256k",
-					"-Xmx512m",
-					"-Xms256m",
-					"-XX:MaxMetaspaceSize=128m",
-					"-XX:+AlwaysActAsServerClassMachine",
-					"-XX:+ExitOnOutOfMemoryError",
-					"-XX:+UseContainerSupport",
-					"-XX:+UseStringDeduplication",
-					"-XX:+ExitOnOutOfMemoryError",
-					"-XX:+OptimizeStringConcat",
-					"-XX:MaxRAMPercentage=75",
-					"-XX:InitialRAMPercentage=50",
-					"-XX:HeapDumpPath=/opt/tmp/heapdump.bin"]
-		mainClass = "by.vk.betting.api.ServiceApplication"
-		ports = [System.getenv("DOCKER_CONTAINER_PORT")] // 8080
-		labels = Map.of("app-name", "api", "service-version", "$version")
-		creationTime = "USE_CURRENT_TIMESTAMP"
-	}
 }
