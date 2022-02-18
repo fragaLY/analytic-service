@@ -34,6 +34,10 @@ java {
 	targetCompatibility = JavaVersion.VERSION_17
 }
 
+test {
+	useJUnitPlatform()
+}
+
 node {
 	version = "16.9.0"
 	distBaseUrl = "https://nodejs.org/dist"
@@ -42,13 +46,11 @@ node {
 	nodeModulesDir = file("frontend/")
 }
 
-task npmBuild(type: NodeTask) {
-	dependsOn(npmInstall)
-	workingDir = file("frontend/")
-	args = ["run", "build"]
+task bundle(type: NpmTask, dependsOn: npmInstall) {
+	args = ['run', 'build']
 }
 
-processResources.dependsOn npmBuild
+processResources.dependsOn bundle
 
 configurations {
 	compileOnly {
@@ -79,5 +81,9 @@ dependencies {
 	//region logback
 	implementation("ch.qos.logback.contrib:logback-json-classic:${logbackVersion}")
 	implementation("ch.qos.logback.contrib:logback-jackson:${logbackVersion}")
+	//endregion
+
+	//region test
+	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	//endregion
 }
