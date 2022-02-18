@@ -1,6 +1,6 @@
 # historical data aggregator
 
-> [![pipeline status](add link)
+> [![Build and Deploy to GKE](https://github.com/fragaLY/analytic-service/actions/workflows/google.yml/badge.svg?branch=master)](https://github.com/fragaLY/analytic-service/actions/workflows/google.yml)
 
 ### How to run in develop mode
 
