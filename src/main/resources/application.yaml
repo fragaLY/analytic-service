@@ -1,0 +1,73 @@
+server:
+  port: 8080
+  shutdown: graceful
+  servlet:
+    session:
+      timeout: 60m
+      cookie:
+        http-only: true
+    application-display-name: api
+  error:
+    whitelabel:
+      enabled: false
+
+spring:
+  application:
+    name: api
+  main:
+    lazy-initialization: true
+    web-application-type: servlet
+    banner-mode: off
+  jackson:
+    time-zone: UTC
+    locale: en_US
+  mvc:
+    format:
+      date: iso
+      date-time: iso
+  lifecycle:
+    timeout-per-shutdown-phase: 30s
+
+management:
+  health:
+    livenessstate:
+      enabled: true
+    readinessstate:
+      enabled: true
+  endpoint:
+    health:
+      enabled: true
+      probes:
+        enabled: true
+      show-components: never
+      show-details: never
+    metrics.enabled: true
+    prometheus.enabled: true
+  endpoints.web.exposure.include: "*"
+  metrics.export.prometheus.enabled: true
+
+logging.level:
+  ROOT: info
+  by.vk.sample.service: info
+  org.springframework: info
+  reactor.netty.http.client: error
+
+springdoc:
+  show-actuator: true
+  api-docs:
+    enabled: false
+    groups:
+      enabled: false
+
+betting:
+  webclient:
+    enabled: true
+    timeout: 5000
+    max-attempts: 5
+    duration: 1
+    baseurl: "http://ec2-3-123-232-146.eu-central-1.compute.amazonaws.com:8000/soccer"
+    segments:
+      - "/2000"
+      - "/2001"
+  spark:
+    appName: "analytic-service"

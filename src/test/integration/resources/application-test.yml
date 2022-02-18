@@ -1,0 +1,9 @@
+spring:
+  main:
+    web-application-type: none
+  jpa:
+    show-sql: true
+    properties:
+      hibernate:
+        generate_statistics: true
+
