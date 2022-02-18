@@ -11,7 +11,7 @@ group = "by.vk.betting.api"
 version = "1.0.0-rc.1"
 
 application {
-	mainClass = "by.vk.sample.service.ServiceApplication"
+	mainClass = "by.vk.betting.api.ServiceApplication"
 	applicationName = "api"
 }
 
@@ -138,7 +138,7 @@ jib {
 					"-XX:MaxRAMPercentage=75",
 					"-XX:InitialRAMPercentage=50",
 					"-XX:HeapDumpPath=/opt/tmp/heapdump.bin"]
-		mainClass = "by.vk.sample.service.ServiceApplication"
+		mainClass = "by.vk.betting.api.ServiceApplication"
 		ports = [System.getenv("DOCKER_CONTAINER_PORT")] // 8080
 		labels = Map.of("app-name", "api", "service-version", "$version")
 		creationTime = "USE_CURRENT_TIMESTAMP"
