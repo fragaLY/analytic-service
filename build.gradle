@@ -120,7 +120,7 @@ jib {
 					"-XX:InitialRAMPercentage=50",
 					"-XX:HeapDumpPath=/opt/tmp/heapdump.bin"]
 		mainClass = "by.vk.betting.api.ServiceApplication"
-		ports = ['80']
+		ports = ['8080']
 		labels = ["app-name": "analytic-service", "service-version": "$version"]
 		creationTime = "USE_CURRENT_TIMESTAMP"
 	}
