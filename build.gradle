@@ -4,9 +4,10 @@ plugins {
 	id "idea"
 	id "org.springframework.boot" version "2.6.3"
 	id "io.spring.dependency-management" version "1.0.11.RELEASE"
-	id "com.moowork.node" version "1.3.1"
 	id "maven-publish"
 	id "com.google.cloud.artifactregistry.gradle-plugin" version "2.1.5"
+	id "com.google.cloud.tools.jib" version "3.2.0"
+	id "com.heroku.sdk.heroku-gradle" version "2.0.0"
 }
 
 group = "by.vk.betting.api"
@@ -38,27 +39,9 @@ test {
 	useJUnitPlatform()
 }
 
-node {
-	version = "16.9.0"
-	distBaseUrl = "https://nodejs.org/dist"
-	download = false
-	npmWorkDir = file("build/nodejs/")
-	nodeModulesDir = file("frontend/")
-}
-
-task bundle(type: NpmTask, dependsOn: npmInstall) {
-	args = ['run', 'build']
-}
-
-processResources.dependsOn bundle
-
 configurations {
 	compileOnly {
 		extendsFrom annotationProcessor
-	}
-
-	implementation {
-		exclude module: "spring-boot-starter-tomcat"
 	}
 }
 
@@ -76,6 +59,15 @@ publishing {
 	}
 }
 
+heroku {
+	appName = "analytic-service"
+	jdkVersion = 17
+	includes = ["build/libs/application.jar"]
+	processTypes(
+			web: "java -jar build/libs/application.jar"
+	)
+}
+
 repositories {
 	mavenCentral()
 	maven {
@@ -90,7 +82,6 @@ ext {
 dependencies {
 	//region spring
 	implementation("org.springframework.boot:spring-boot-starter-validation")
-	implementation("org.springframework.boot:spring-boot-starter-undertow")
 	implementation("org.springframework.boot:spring-boot-starter-web")
 	implementation("org.springframework.boot:spring-boot-starter-actuator")
 	implementation("org.springframework.boot:spring-boot-starter-webflux")
@@ -104,4 +95,33 @@ dependencies {
 	//region test
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	//endregion
+}
+
+jib {
+	from {
+		image = "gcr.io/distroless/java17-debian11"
+	}
+	to {
+		image = "fragaly/analytic-service"
+		tags = ["$version", "latest"]
+	}
+	container {
+		jvmFlags = ["-Xss256k",
+					"-Xmx512m",
+					"-Xms256m",
+					"-XX:MaxMetaspaceSize=128m",
+					"-XX:+AlwaysActAsServerClassMachine",
+					"-XX:+ExitOnOutOfMemoryError",
+					"-XX:+UseContainerSupport",
+					"-XX:+UseStringDeduplication",
+					"-XX:+ExitOnOutOfMemoryError",
+					"-XX:+OptimizeStringConcat",
+					"-XX:MaxRAMPercentage=75",
+					"-XX:InitialRAMPercentage=50",
+					"-XX:HeapDumpPath=/opt/tmp/heapdump.bin"]
+		mainClass = "by.vk.betting.api.ServiceApplication"
+		ports = ['80']
+		labels = ["app-name": "analytic-service", "service-version": "$version"]
+		creationTime = "USE_CURRENT_TIMESTAMP"
+	}
 }
