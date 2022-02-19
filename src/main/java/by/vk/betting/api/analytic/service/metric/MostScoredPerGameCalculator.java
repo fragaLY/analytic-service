@@ -1,8 +1,8 @@
 package by.vk.betting.api.analytic.service.metric;
 
+import by.vk.betting.api.analytic.dto.analytic.Metric;
 import by.vk.betting.api.analytic.dto.analytic.TeamAnalyticResult;
 import by.vk.betting.api.analytic.dto.exposed.ExposedResponse;
-import by.vk.betting.api.analytic.dto.result.ResultHolder;
 import by.vk.betting.api.analytic.service.agregator.TeamAnalyticAggregator;
 import by.vk.betting.api.analytic.service.counter.PerGameScoreCounter;
 import by.vk.betting.api.analytic.service.predicate.ExposedResponsePredicate;
@@ -22,7 +22,7 @@ public record MostScoredPerGameCalculator(TeamAnalyticAggregator aggregator,
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MostScoredPerGameCalculator.class);
 
-    public ResultHolder calculate(Flux<ExposedResponse> dataset) {
+    public Metric calculate(Flux<ExposedResponse> dataset) {
         LOGGER.info("[METRICS] Most scored per game per game team(s)");
         var result = dataset
                 .toStream()
@@ -32,9 +32,14 @@ public record MostScoredPerGameCalculator(TeamAnalyticAggregator aggregator,
                 .entrySet()
                 .stream()
                 .map(counter)
-                .max(Comparator.comparingDouble(ResultHolder::amount))
+                .max(Comparator.comparingDouble(Metric::amount))
                 .orElseThrow(() -> new NotFoundException("Most scored per game team not found"));
         LOGGER.info("[METRICS] Most scored per game team(s) are [{}]", result);
         return result;
+    }
+
+    @Override
+    public String getMetricName() {
+        return "mostScoredPerGame";
     }
 }

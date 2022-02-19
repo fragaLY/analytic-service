@@ -1,8 +1,8 @@
 package by.vk.betting.api.analytic.service.metric;
 
+import by.vk.betting.api.analytic.dto.analytic.Metric;
 import by.vk.betting.api.analytic.dto.analytic.TeamAnalyticResult;
 import by.vk.betting.api.analytic.dto.exposed.ExposedResponse;
-import by.vk.betting.api.analytic.dto.result.ResultHolder;
 import by.vk.betting.api.analytic.service.agregator.TeamAnalyticAggregator;
 import by.vk.betting.api.analytic.service.counter.WinCounter;
 import by.vk.betting.api.analytic.service.predicate.ExposedResponsePredicate;
@@ -23,7 +23,7 @@ public record MostWinCalculator(TeamAnalyticAggregator aggregator,
     private static final Logger LOGGER = LoggerFactory.getLogger(MostWinCalculator.class);
 
     @Override
-    public ResultHolder calculate(Flux<ExposedResponse> dataset) {
+    public Metric calculate(Flux<ExposedResponse> dataset) {
         LOGGER.info("[METRICS] Calculating most win team(s).");
         var result = dataset
                 .toStream()
@@ -37,5 +37,10 @@ public record MostWinCalculator(TeamAnalyticAggregator aggregator,
                 .orElseThrow(() -> new NotFoundException("Most win games team not found"));
         LOGGER.info("[METRICS] Most win team(s) are [{}]", result);
         return result;
+    }
+
+    @Override
+    public String getMetricName() {
+        return "mostWin";
     }
 }

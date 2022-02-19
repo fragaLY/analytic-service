@@ -1,9 +1,11 @@
 package by.vk.betting.api.analytic.api;
 
-import by.vk.betting.api.analytic.dto.result.Response;
+import by.vk.betting.api.analytic.dto.analytic.Metric;
 import by.vk.betting.api.analytic.service.AnalyticService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.Map;
 
 @RestController
 public class AnalyticApi implements Api {
@@ -15,7 +17,7 @@ public class AnalyticApi implements Api {
   }
 
   @Override
-  public ResponseEntity<Response> get() {
+  public ResponseEntity<Map<String, Metric>> get() {
     return ResponseEntity.ok(service.get());
   }
 }

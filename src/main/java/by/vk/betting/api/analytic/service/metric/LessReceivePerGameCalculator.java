@@ -1,8 +1,8 @@
 package by.vk.betting.api.analytic.service.metric;
 
+import by.vk.betting.api.analytic.dto.analytic.Metric;
 import by.vk.betting.api.analytic.dto.analytic.TeamAnalyticResult;
 import by.vk.betting.api.analytic.dto.exposed.ExposedResponse;
-import by.vk.betting.api.analytic.dto.result.ResultHolder;
 import by.vk.betting.api.analytic.service.agregator.TeamAnalyticAggregator;
 import by.vk.betting.api.analytic.service.counter.PerGameReceiveCounter;
 import by.vk.betting.api.analytic.service.predicate.ExposedResponsePredicate;
@@ -22,7 +22,7 @@ public record LessReceivePerGameCalculator(TeamAnalyticAggregator aggregator,
 
     private static final Logger LOGGER = LoggerFactory.getLogger(LessReceivePerGameCalculator.class);
 
-    public ResultHolder calculate(Flux<ExposedResponse> dataset) {
+    public Metric calculate(Flux<ExposedResponse> dataset) {
         LOGGER.info("[METRICS] Calculating less received per game team(s)");
         var result = dataset
                 .toStream()
@@ -32,9 +32,14 @@ public record LessReceivePerGameCalculator(TeamAnalyticAggregator aggregator,
                 .entrySet()
                 .stream()
                 .map(counter)
-                .min(Comparator.comparingDouble(ResultHolder::amount))
+                .min(Comparator.comparingDouble(Metric::amount))
                 .orElseThrow(() -> new NotFoundException("Less received per game team not found"));
         LOGGER.info("[METRICS] Less received per game team(s) are [{}]", result);
         return result;
+    }
+
+    @Override
+    public String getMetricName() {
+        return "lessReceivedPerGame";
     }
 }
