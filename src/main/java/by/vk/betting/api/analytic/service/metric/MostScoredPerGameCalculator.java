@@ -23,8 +23,8 @@ public record MostScoredPerGameCalculator(TeamAnalyticAggregator aggregator,
     private static final Logger LOGGER = LoggerFactory.getLogger(MostScoredPerGameCalculator.class);
 
     public ResultHolder calculate(Flux<ExposedResponse> dataset) {
-        LOGGER.info("[MOST-SCORE-CALCULATOR] Calculating most scored per game team.");
-        return dataset
+        LOGGER.info("[METRICS] Most scored per game per game team(s)");
+        var result = dataset
                 .toStream()
                 .filter(responsePredicate)
                 .flatMap(aggregator)
@@ -34,5 +34,7 @@ public record MostScoredPerGameCalculator(TeamAnalyticAggregator aggregator,
                 .map(counter)
                 .max(Comparator.comparingDouble(ResultHolder::amount))
                 .orElseThrow(() -> new NotFoundException("Most scored per game team not found"));
+        LOGGER.info("[METRICS] Most scored per game team(s) are [{}]", result);
+        return result;
     }
 }

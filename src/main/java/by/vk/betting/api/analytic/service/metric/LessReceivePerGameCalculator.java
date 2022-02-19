@@ -23,8 +23,8 @@ public record LessReceivePerGameCalculator(TeamAnalyticAggregator aggregator,
     private static final Logger LOGGER = LoggerFactory.getLogger(LessReceivePerGameCalculator.class);
 
     public ResultHolder calculate(Flux<ExposedResponse> dataset) {
-        LOGGER.info("[LESS-RECEIVE-CALCULATOR] Calculating less received per game team.");
-        return dataset
+        LOGGER.info("[METRICS] Calculating less received per game team(s)");
+        var result = dataset
                 .toStream()
                 .filter(responsePredicate)
                 .flatMap(aggregator)
@@ -34,5 +34,7 @@ public record LessReceivePerGameCalculator(TeamAnalyticAggregator aggregator,
                 .map(counter)
                 .min(Comparator.comparingDouble(ResultHolder::amount))
                 .orElseThrow(() -> new NotFoundException("Less received per game team not found"));
+        LOGGER.info("[METRICS] Less received per game team(s) are [{}]", result);
+        return result;
     }
 }

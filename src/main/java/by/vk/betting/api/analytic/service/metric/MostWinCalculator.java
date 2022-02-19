@@ -24,8 +24,8 @@ public record MostWinCalculator(TeamAnalyticAggregator aggregator,
 
     @Override
     public ResultHolder calculate(Flux<ExposedResponse> dataset) {
-        LOGGER.info("[MOST-WIN-CALCULATOR] Calculating most win team.");
-        return dataset
+        LOGGER.info("[METRICS] Calculating most win team(s).");
+        var result = dataset
                 .toStream()
                 .filter(responsePredicate)
                 .flatMap(aggregator)
@@ -35,5 +35,7 @@ public record MostWinCalculator(TeamAnalyticAggregator aggregator,
                 .map(counter)
                 .max(Comparator.comparingInt(it -> (int) it.amount()))
                 .orElseThrow(() -> new NotFoundException("Most win games team not found"));
+        LOGGER.info("[METRICS] Most win team(s) are [{}]", result);
+        return result;
     }
 }

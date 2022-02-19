@@ -18,16 +18,11 @@ public record AnalyticService(DatasetProvider provider,
     private static final Logger LOGGER = LoggerFactory.getLogger(AnalyticService.class);
 
     public Response get() {
-
-        LOGGER.info("[ANALYTIC] Calculating aggregated results");
-        var dataset = provider.provide();
-        var mostWinTeam = mostWinCalculator.calculate(dataset);
-        var mostScorePerGameTeam = mostScoredPerGameCalculator.calculate(dataset);
-        var lessReceivePerGameTeam = lessReceivePerGameCalculator.calculate(dataset);
-
-       LOGGER.info("Most win [{}]", mostWinTeam);
-       LOGGER.info("Most score [{}]", mostScorePerGameTeam);
-       LOGGER.info("Less receive [{}]", lessReceivePerGameTeam);
+       LOGGER.info("[ANALYTIC] Calculating aggregated results");
+       var dataset = provider.provide();
+       var mostWinTeam = mostWinCalculator.calculate(dataset);
+       var mostScorePerGameTeam = mostScoredPerGameCalculator.calculate(dataset);
+       var lessReceivePerGameTeam = lessReceivePerGameCalculator.calculate(dataset);
        return new Response(mostWinTeam, mostScorePerGameTeam, lessReceivePerGameTeam);
     }
 }
