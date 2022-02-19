@@ -14,6 +14,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.http.client.reactive.ReactorClientHttpConnector;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.netty.http.client.HttpClient;
+import reactor.netty.resources.ConnectionProvider;
 import reactor.util.retry.RetryBackoffSpec;
 import reactor.util.retry.RetrySpec;
 
@@ -29,8 +30,17 @@ public class WebClientConfiguration {
   @ConditionalOnProperty(name = "betting.webclient.enabled", matchIfMissing = true)
   public WebClient webClient(WebClientProperties properties) {
 
+    var provider =
+        ConnectionProvider.builder("custom")
+            .maxConnections(10)
+            .maxIdleTime(Duration.ofSeconds(20))
+            .maxLifeTime(Duration.ofSeconds(60))
+            .pendingAcquireTimeout(Duration.ofSeconds(60))
+            .evictInBackground(Duration.ofSeconds(120))
+            .build();
+
     final var httpClient =
-        HttpClient.create()
+        HttpClient.create(provider)
             .option(ChannelOption.CONNECT_TIMEOUT_MILLIS, properties.timeout())
             .doOnConnected(
                 connection -> {
@@ -39,6 +49,8 @@ public class WebClientConfiguration {
                   connection.addHandlerLast(
                       new WriteTimeoutHandler(properties.timeout(), TimeUnit.MILLISECONDS));
                 });
+
+    provider.disposeLater().block();
 
     return WebClient.builder()
         .baseUrl(properties.baseUrl())

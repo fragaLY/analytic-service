@@ -50,7 +50,7 @@ task bundle(type: NpmTask, dependsOn: npmInstall) {
 	args = ['run', 'build']
 }
 
-processResources.dependsOn bundle
+//processResources.dependsOn bundle
 
 configurations {
 	compileOnly {
