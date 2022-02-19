@@ -1,4 +1,4 @@
-package by.vk.betting.api.analytic.service.function;
+package by.vk.betting.api.analytic.service.counter;
 
 import by.vk.betting.api.analytic.dto.analytic.TeamAnalyticResult;
 import by.vk.betting.api.analytic.dto.result.ResultHolder;
@@ -10,14 +10,14 @@ import java.util.function.Function;
 
 @Component
 public class WinCounter
-    implements Function<Map.Entry<String, List<TeamAnalyticResult>>, ResultHolder> {
+    implements Function<Map.Entry<String, List<TeamAnalyticResult>>, ResultHolder>, Countable {
 
   @Override
   public ResultHolder apply(Map.Entry<String, List<TeamAnalyticResult>> entry) {
+    var analytic = entry.getValue();
     var amount =
-        entry.getValue().stream()
-            .mapToInt(tar -> tar.teamScore() > tar.opponentScore() ? 1 : 0)
-            .sum();
-    return new ResultHolder(entry.getKey(), amount);
+        analytic.stream().mapToInt(tar -> tar.teamScore() > tar.opponentScore() ? ONE : ZERO).sum();
+    var name = analytic.get(ZERO).teamName();
+    return new ResultHolder(name, amount);
   }
 }
