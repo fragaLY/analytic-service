@@ -43,7 +43,7 @@ node {
 	distBaseUrl = "https://nodejs.org/dist"
 	download = false
 	npmWorkDir = file("build/nodejs/")
-	nodeModulesDir = file("frontend/")
+	nodeModulesDir = file("/home/runner/work/analytic-service/analytic-service/frontend/")
 }
 
 task bundle(type: NpmTask, dependsOn: npmInstall) {

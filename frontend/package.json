@@ -13,7 +13,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build & mv build ../build/resources/main/static",
+    "build": "react-scripts build & mv build /home/runner/work/analytic-service/analytic-service/build/resources/main/static",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
