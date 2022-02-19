@@ -18,7 +18,7 @@ jobs:
       - name: Preparation
         run: chmod +x gradlew
       - name: Tests
-        run: ./gradlew test --parallel -x nodeSetup -x nodeInstall
+        run: ./gradlew test --parallel -x nodeSetup -x npmInstall
   build:
     runs-on: ubuntu-latest
     needs: test
