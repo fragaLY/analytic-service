@@ -1,6 +1,5 @@
 package by.vk.betting.api;
 
-import by.vk.betting.api.analytic.service.AnalyticService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
@@ -12,7 +11,7 @@ import org.springframework.boot.info.BuildProperties;
 @ConfigurationPropertiesScan
 public class ServiceApplication {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger(AnalyticService.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(ServiceApplication.class);
 
   public static void main(String[] args) {
     final var context = SpringApplication.run(ServiceApplication.class, args);

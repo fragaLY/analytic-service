@@ -1,5 +1,6 @@
 package by.vk.betting.api.analytic.api;
 
+import by.vk.betting.api.analytic.dto.result.Response;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,5 +15,5 @@ public interface Api {
 
   @GetMapping("/aggregate")
   @ResponseStatus(OK)
-  ResponseEntity<Void> get();
+  ResponseEntity<Response> get();
 }

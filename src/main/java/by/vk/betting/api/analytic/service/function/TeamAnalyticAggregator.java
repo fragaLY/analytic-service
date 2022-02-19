@@ -8,7 +8,8 @@ import java.util.function.Function;
 import java.util.stream.Stream;
 
 @Component
-public class TeamAnalyticAggregator implements Function<ExposedResponse, Stream<TeamAnalyticResult>> {
+public class TeamAnalyticAggregator
+    implements Function<ExposedResponse, Stream<TeamAnalyticResult>> {
 
   @Override
   public Stream<TeamAnalyticResult> apply(ExposedResponse response) {

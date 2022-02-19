@@ -15,12 +15,12 @@ import java.util.Comparator;
 import java.util.stream.Collectors;
 
 @Component
-public record MostScoredCalculator(TeamAnalyticAggregator aggregator, ScoreCounter counter) {
+public record LessReceiveCalculator(TeamAnalyticAggregator aggregator, ScoreCounter counter) {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(MostScoredCalculator.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(LessReceiveCalculator.class);
 
     public ResultHolder calculate(Flux<ExposedResponse> dataset) {
-        LOGGER.info("[MOST-SCORE-CALCULATOR] Calculating most scored per game team.");
+        LOGGER.info("[LESS-RECEIVE-CALCULATOR] Calculating less received per game team.");
         return dataset
                 .toStream()
                 .flatMap(aggregator)
@@ -28,7 +28,7 @@ public record MostScoredCalculator(TeamAnalyticAggregator aggregator, ScoreCount
                 .entrySet()
                 .stream()
                 .map(counter)
-                .max(Comparator.comparingInt(ResultHolder::amount))
-                .orElseThrow(() -> new NotFoundException("Most scored not found"));
+                .min(Comparator.comparingInt(ResultHolder::amount))
+                .orElseThrow(() -> new NotFoundException("Less received not found"));
     }
 }
