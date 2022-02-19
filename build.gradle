@@ -19,11 +19,21 @@ application {
 bootJar {
 	enabled = true
 	archiveFileName = "application.jar"
-
+	dependsOn("assembleFrontend")
+	from("$buildDir/frontend/build")
+	into("static")
 	manifest {
 		attributes 'provider': 'gradle'
 	}
 }
+
+frontend {
+	nodeVersion = '16.9.0'
+	packageJsonDirectory = file('frontend/')
+	assembleScript = 'run build'
+}
+
+assembleFrontend.dependsOn processResources
 
 springBoot {
 	buildInfo()
@@ -37,14 +47,6 @@ java {
 test {
 	useJUnitPlatform()
 }
-
-frontend {
-	nodeVersion = '16.9.0'
-	packageJsonDirectory = file('frontend/')
-	assembleScript = 'run build'
-}
-
-assembleFrontend.dependsOn processResources
 
 jib {
 	from {
