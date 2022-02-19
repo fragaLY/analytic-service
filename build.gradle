@@ -5,7 +5,7 @@ plugins {
 	id "org.springframework.boot" version "2.6.3"
 	id "io.spring.dependency-management" version "1.0.11.RELEASE"
 	id "com.google.cloud.tools.jib" version "3.2.0"
-	id "com.moowork.node" version "1.3.1"
+	id "org.siouan.frontend-jdk11" version "6.0.0"
 }
 
 group = "by.vk.betting.api"
@@ -38,19 +38,13 @@ test {
 	useJUnitPlatform()
 }
 
-node {
-	version = "16.9.0"
-	distBaseUrl = "https://nodejs.org/dist"
-	download = false
-	npmWorkDir = file("build/nodejs/")
-	nodeModulesDir = file("/home/runner/work/analytic-service/analytic-service/frontend/")
+frontend {
+	nodeVersion = '16.9.0'
+	packageJsonDirectory = file('frontend/')
+	assembleScript = 'run build'
 }
 
-task bundle(type: NpmTask, dependsOn: npmInstall) {
-	args = ['run', 'build']
-}
-
-processResources.dependsOn bundle
+assembleFrontend.dependsOn processResources
 
 jib {
 	from {
