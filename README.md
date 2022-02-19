@@ -5,12 +5,11 @@
 ### How to run in develop mode
 1. Separate run for backend and frontend parts
 - run ```gradle bootRun```
-- run ```cd frontend``` and ```npm start```
-- [Liveness](http://localhost:3000)
+- [Aggregate](http://localhost/api/teams/aggregate)
 - [Liveness](http://localhost/actuator/health/liveness)
 - [Readiness](http://localhost/actuator/health/readiness)
 
-2. Run full application
+2. Run using gradle and java application
 - run ```gradle clean build``` and ```java -jar build/libs/application.jar```
 
 3. Run docker image

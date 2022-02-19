@@ -17,7 +17,7 @@ import static org.springframework.http.HttpStatus.OK;
 public interface Api {
 
   @GetMapping("/aggregate")
-  @CrossOrigin(origins = "http://localhost:3000")
+  @CrossOrigin(origins = {"http://localhost:3000", "http://localhost:80"})
   @ResponseStatus(OK)
   ResponseEntity<Map<String, Metric>> get();
 }
