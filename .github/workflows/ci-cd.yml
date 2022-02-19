@@ -19,7 +19,7 @@ jobs:
         run: chmod +x gradlew
       - name: Build
         if: github.ref == 'refs/heads/master'
-        run: ./gradlew build -Djib.to.image=${{ secrets.DOCKER_HUB_REGISTRY }}/${{ secrets.DOCKER_HUB_USER }}/analytic-service:latest -Djib.to.auth.username=${{ secrets.DOCKER_HUB_USER }} -Djib.to.auth.password=${{ secrets.DOCKER_HUB_PASSWORD }}
+        run: ./gradlew build --stacktrace -Djib.to.image=${{ secrets.DOCKER_HUB_REGISTRY }}/${{ secrets.DOCKER_HUB_USER }}/analytic-service:latest -Djib.to.auth.username=${{ secrets.DOCKER_HUB_USER }} -Djib.to.auth.password=${{ secrets.DOCKER_HUB_PASSWORD }}
 #  notification:
 #    runs-on: ubuntu-latest
 #    needs: build
