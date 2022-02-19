@@ -19,7 +19,10 @@ public record AnalyticService(DatasetProvider provider, List<Calculable> metrics
     public Map<String, Metric> get() {
        LOGGER.info("[ANALYTIC] Calculating aggregated results");
        var dataset = provider.provide();
-       var analyticResult = metricsCalculators.stream().map(it -> Map.of(it.getMetricName(), it.calculate(dataset))).flatMap(metrics -> metrics.entrySet().stream()).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
-       return analyticResult;
+       return metricsCalculators
+               .stream()
+               .map(it -> Map.of(it.getMetricName(), it.calculate(dataset)))
+               .flatMap(metrics -> metrics.entrySet().stream())
+               .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
     }
 }
