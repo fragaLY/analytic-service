@@ -19,8 +19,8 @@ jobs:
           java-version: 17
           distribution: 'adopt'
           architecture: x64
-      - name: Preparation
-        run: chmod +x gradlew
+#      - name: Preparation
+#        run: chmod +x gradlew
       - name: Build
         if: github.ref == 'refs/heads/master'
         run: ./gradlew build --stacktrace -Djib.to.image=${{ secrets.DOCKER_HUB_REGISTRY }}/${{ secrets.DOCKER_HUB_USER }}/analytic-service:latest -Djib.to.auth.username=${{ secrets.DOCKER_HUB_USER }} -Djib.to.auth.password=${{ secrets.DOCKER_HUB_PASSWORD }}
