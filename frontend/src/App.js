@@ -65,7 +65,7 @@ function App() {
             )}
           </div>
           <button className="agg-button" onClick={handleAggregateData}>
-            Aggregate
+            Update
           </button>
         </div>
       </div>

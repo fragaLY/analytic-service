@@ -12,3 +12,6 @@
 
 2. Run full application
 - run ```gradle clean build``` and ```java -jar build/libs/application.jar```
+
+3. Run docker image
+- run ```gradle clean jibDockerBuild``` and ```docker run -p 80:80 fragaly/analytic-service```
