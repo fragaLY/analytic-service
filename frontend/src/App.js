@@ -5,6 +5,7 @@ function App() {
   const [state, setState] = useState({
     data: null,
     loading: false,
+    errors: null
   });
 
   const handleAggregateData = async () => {
@@ -17,7 +18,7 @@ function App() {
     setState({ ...state, data: result, loading: false });
   };
 
-  const { loading, data } = state;
+  const { loading, data, errors } = state;
 
   return (
     <div className="app">
@@ -63,9 +64,12 @@ function App() {
             {!loading && !data && (
               <div className="dashboard__no-data">No data</div>
             )}
+            {!loading && errors && (
+              <div className="dashboard__no-data">Not all data was captured. Please, reprocess it.</div>
+            )}
           </div>
           <button className="agg-button" onClick={handleAggregateData}>
-            Update
+            Aggregate
           </button>
         </div>
       </div>
