@@ -16,9 +16,11 @@ jobs:
           distribution: 'adopt'
           architecture: x64
       - name: Tests
-        run: chmod +x gradlew &&\
-          mkdir build &&\
-          ./gradlew test -x npmInstall --parallel
+        run: |
+          pwd;\
+          mkdir build;\
+          chmod +x gradlew;\
+          ./gradlew test -x npmInstall --parallel;
   build:
     runs-on: ubuntu-latest
     needs: test
