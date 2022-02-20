@@ -10,6 +10,8 @@ import org.springframework.web.client.RestTemplate;
 import java.net.URI;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Component
 public record DatasetProvider(WebClientProperties properties) {
@@ -19,7 +21,10 @@ public record DatasetProvider(WebClientProperties properties) {
     public List<ExposedResponse> provide() {
         LOGGER.info("[DATASET PROVIDER] Providing datasets for segments [{}]", properties.segments());
         var template = new RestTemplate();
-        var response = template.getForEntity(URI.create(properties.baseUrl().concat(properties.segments().get(0))), ExposedResponse[].class);
-        return Arrays.asList(response.getBody());
+        return properties
+                .segments()
+                .parallelStream()
+                .map(segment -> template.getForEntity(URI.create(properties.baseUrl().concat(segment)), ExposedResponse[].class))
+                .flatMap(response -> Arrays.stream(Objects.requireNonNull(response.getBody()))).collect(Collectors.toList());
     }
 }
