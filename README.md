@@ -1,7 +1,5 @@
 # Historical data analytic service
 
-> [![CI/CD](https://github.com/fragaLY/analytic-service/actions/workflows/ci-cd.yml/badge.svg)](https://github.com/fragaLY/analytic-service/actions/workflows/ci-cd.yml)
-
 ### How to run in develop mode
 1. Separate run for backend and frontend parts
 - run ```gradle bootRun```
