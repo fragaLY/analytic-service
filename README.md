@@ -12,3 +12,6 @@
 
 3. Run docker image
 - run ```gradle clean jibDockerBuild``` and ```docker run -p 80:80 fragaly/analytic-service```
+
+### How to run from docker.io
+```docker run -p 80:80 fragaly/analytic-service```
