@@ -27,15 +27,16 @@ public record MostWinCalculator(TeamAnalyticAggregator aggregator,
         LOGGER.info("[METRICS] Calculating most win team(s).");
         var result = dataset
                 .toStream()
+                .parallel()
                 .filter(responsePredicate)
                 .flatMap(aggregator)
                 .collect(Collectors.groupingBy(TeamAnalyticResult::teamKey))
                 .entrySet()
-                .stream()
+                .parallelStream()
                 .map(counter)
                 .collect(Collectors.toMap(Metric::amount, Metric::team, (firstTeam, secondTeam) -> String.format("%s, %s", firstTeam, secondTeam)))
                 .entrySet()
-                .stream()
+                .parallelStream()
                 .max(Comparator.comparingInt(entry -> entry.getKey().toBigIntegerExact().intValueExact()))
                 .map(it -> new Metric(it.getValue(), it.getKey()))
                 .orElseThrow(() -> new NotFoundException("Most win games team not found"));

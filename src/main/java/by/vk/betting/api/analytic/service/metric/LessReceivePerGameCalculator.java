@@ -27,15 +27,16 @@ public record LessReceivePerGameCalculator(TeamAnalyticAggregator aggregator,
         LOGGER.info("[METRICS] Calculating less received per game team(s)");
         var result = dataset
                 .toStream()
+                .parallel()
                 .filter(responsePredicate)
                 .flatMap(aggregator)
                 .collect(Collectors.groupingBy(TeamAnalyticResult::teamKey))
                 .entrySet()
-                .stream()
+                .parallelStream()
                 .map(counter)
                 .collect(Collectors.toMap(Metric::amount, Metric::team, (firstTeam, secondTeam) -> String.format("%s, %s", firstTeam, secondTeam)))
                 .entrySet()
-                .stream()
+                .parallelStream()
                 .min(Map.Entry.comparingByKey(Comparator.naturalOrder()))
                 .map(it -> new Metric(it.getValue(), it.getKey()))
                 .orElseThrow(() -> new NotFoundException("Less received per game team not found"));

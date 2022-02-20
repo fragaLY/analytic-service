@@ -21,7 +21,7 @@ public class PerGameReceiveCounter
   public Metric apply(Map.Entry<String, List<TeamAnalyticResult>> entry) {
     LOGGER.debug("[METRICS] Calculating per game received metric for [{}]", entry.getKey());
     var analytics = entry.getValue();
-    var received = analytics.stream().mapToInt(TeamAnalyticResult::opponentScore).sum();
+    var received = analytics.parallelStream().mapToInt(TeamAnalyticResult::opponentScore).sum();
     var games = analytics.size();
     var name = analytics.get(ZERO).teamName();
     var amount = received == ZERO ? ZERO : (double) received / games;

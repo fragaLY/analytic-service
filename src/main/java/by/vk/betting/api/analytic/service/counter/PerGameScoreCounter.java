@@ -21,7 +21,7 @@ public class PerGameScoreCounter
   public Metric apply(Map.Entry<String, List<TeamAnalyticResult>> entry) {
     LOGGER.debug("[METRICS] Calculating per game scored metric for [{}]", entry.getKey());
     var analytics = entry.getValue();
-    var scored = analytics.stream().mapToInt(TeamAnalyticResult::teamScore).sum();
+    var scored = analytics.parallelStream().mapToInt(TeamAnalyticResult::teamScore).sum();
     var games = analytics.size();
     var name = analytics.get(ZERO).teamName();
     var amount = scored == ZERO ? ZERO : (double) scored / games;

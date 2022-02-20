@@ -22,7 +22,7 @@ public class WinCounter
     LOGGER.debug("[METRICS] Calculating wins metric for [{}]", entry.getKey());
     var analytic = entry.getValue();
     var amount =
-        analytic.stream().mapToInt(tar -> tar.teamScore() > tar.opponentScore() ? ONE : ZERO).sum();
+        analytic.parallelStream().mapToInt(tar -> tar.teamScore() > tar.opponentScore() ? ONE : ZERO).sum();
     var name = analytic.get(ZERO).teamName();
     var metric = new Metric(name, BigDecimal.valueOf(amount));
     LOGGER.debug("[METRICS] Wins metric for [{}] is [{}]", entry.getKey(), metric);
