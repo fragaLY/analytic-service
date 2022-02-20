@@ -15,12 +15,10 @@ jobs:
           java-version: 17
           distribution: 'adopt'
           architecture: x64
-      - name: Preparation
-        run: chmod +x gradlew
-      - name: Prepare build dir
-        run: mkdir build
       - name: Tests
-        run: ./gradlew test -x npmInstall --parallel
+        run: chmod +x gradlew;\
+          mkdir build;\
+          ./gradlew test -x npmInstall --parallel
   build:
     runs-on: ubuntu-latest
     needs: test
@@ -31,8 +29,8 @@ jobs:
           java-version: 17
           distribution: 'adopt'
           architecture: x64
-      - name: Preparation
-        run: chmod +x gradlew
       - name: Build
         if: github.ref == 'refs/heads/master'
-        run: ./gradlew clean jib -x test -Djib.to.image=${{ secrets.DOCKER_HUB_REGISTRY }}/${{ secrets.DOCKER_HUB_USER }}/analytic-service:latest -Djib.to.auth.username=${{ secrets.DOCKER_HUB_USER }} -Djib.to.auth.password=${{ secrets.DOCKER_HUB_PASSWORD }}
+        run: chmod +x gradlew;\
+          mkdir build;\
+          ./gradlew clean jib -x test -Djib.to.image=${{ secrets.DOCKER_HUB_REGISTRY }}/${{ secrets.DOCKER_HUB_USER }}/analytic-service:latest -Djib.to.auth.username=${{ secrets.DOCKER_HUB_USER }} -Djib.to.auth.password=${{ secrets.DOCKER_HUB_PASSWORD }}
