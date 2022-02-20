@@ -15,7 +15,7 @@ public class CorsingFilter {
     final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
     final CorsConfiguration config = new CorsConfiguration();
     config.setAllowCredentials(true);
-    config.setAllowedOrigins(List.of("http://localhost:3000", "http://localhost:80"));
+    config.setAllowedOrigins(List.of("http://localhost:3000", "http://localhost", "http://35.240.126.169/"));
     config.setAllowedHeaders(List.of("Origin", "Content-Type", "Accept"));
     config.setAllowedMethods(List.of("GET", "POST", "PUT", "OPTIONS", "DELETE", "PATCH"));
     source.registerCorsConfiguration("/**", config);
