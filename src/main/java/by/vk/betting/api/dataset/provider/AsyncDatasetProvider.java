@@ -14,12 +14,12 @@ import reactor.core.publisher.Flux;
 import reactor.util.retry.RetryBackoffSpec;
 
 @Component
-public record DatasetProvider(WebClientProperties properties,
-                              WebClient client,
-                              RetryBackoffSpec retrySpec,
-                              ClientErrorFunction clientErrorFunction) {
+public record AsyncDatasetProvider(WebClientProperties properties,
+                                   WebClient client,
+                                   RetryBackoffSpec retrySpec,
+                                   ClientErrorFunction clientErrorFunction) {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(DatasetProvider.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(AsyncDatasetProvider.class);
 
     public Flux<ExposedResponse> provide() {
         LOGGER.info("[DATASET PROVIDER] Providing datasets for segments [{}]", properties.segments());

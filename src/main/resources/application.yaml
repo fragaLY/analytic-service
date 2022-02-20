@@ -65,7 +65,7 @@ betting:
     timeout: 10000
     max-attempts: 5
     duration: 1
-    baseurl: "3.123.232.146:8000/soccer"
+    baseurl: "http://3.123.232.146:8000/soccer"
     segments:
       - "/2000"
       - "/2001"
