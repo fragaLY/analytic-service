@@ -33,7 +33,11 @@ public record MostWinCalculator(TeamAnalyticAggregator aggregator,
                 .entrySet()
                 .stream()
                 .map(counter)
-                .max(Comparator.comparingInt(it -> (int) it.amount()))
+                .collect(Collectors.toMap(Metric::amount, Metric::team, (firstTeam, secondTeam) -> String.format("%s, %s", firstTeam, secondTeam)))
+                .entrySet()
+                .stream()
+                .max(Comparator.comparingInt(entry -> entry.getKey().toBigIntegerExact().intValueExact()))
+                .map(it -> new Metric(it.getValue(), it.getKey()))
                 .orElseThrow(() -> new NotFoundException("Most win games team not found"));
         LOGGER.info("[METRICS] Most win team(s) are [{}]", result);
         return result;

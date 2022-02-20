@@ -13,6 +13,7 @@ import org.springframework.stereotype.Component;
 import reactor.core.publisher.Flux;
 
 import java.util.Comparator;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Component
@@ -32,7 +33,11 @@ public record MostScoredPerGameCalculator(TeamAnalyticAggregator aggregator,
                 .entrySet()
                 .stream()
                 .map(counter)
-                .max(Comparator.comparingDouble(Metric::amount))
+                .collect(Collectors.toMap(Metric::amount, Metric::team, (firstTeam, secondTeam) -> String.format("%s, %s", firstTeam, secondTeam)))
+                .entrySet()
+                .stream()
+                .max(Map.Entry.comparingByKey(Comparator.naturalOrder()))
+                .map(it -> new Metric(it.getValue(), it.getKey()))
                 .orElseThrow(() -> new NotFoundException("Most scored per game team not found"));
         LOGGER.info("[METRICS] Most scored per game team(s) are [{}]", result);
         return result;

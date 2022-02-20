@@ -62,5 +62,4 @@ public class CommonExceptionHandler {
       HttpMessageNotReadableException exception) {
     return new ExceptionInformation(BAD_REQUEST, BAD_REQUEST.value(), exception.getMessage());
   }
-
 }

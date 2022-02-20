@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
@@ -23,7 +24,7 @@ public class WinCounter
     var amount =
         analytic.stream().mapToInt(tar -> tar.teamScore() > tar.opponentScore() ? ONE : ZERO).sum();
     var name = analytic.get(ZERO).teamName();
-    var metric = new Metric(name, amount);
+    var metric = new Metric(name, BigDecimal.valueOf(amount));
     LOGGER.debug("[METRICS] Wins metric for [{}] is [{}]", entry.getKey(), metric);
     return metric;
   }

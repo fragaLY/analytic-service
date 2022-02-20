@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
@@ -24,7 +25,7 @@ public class PerGameReceiveCounter
     var games = analytics.size();
     var name = analytics.get(ZERO).teamName();
     var amount = received == ZERO ? ZERO : (double) received / games;
-    var metric = new Metric(name, amount);
+    var metric = new Metric(name, BigDecimal.valueOf(amount));
     LOGGER.debug("[METRICS] Per game received metric for [{}] is [{}]", entry.getKey(), metric);
     return metric;
   }
