@@ -17,6 +17,8 @@ jobs:
           architecture: x64
       - name: Preparation
         run: chmod +x gradlew
+      - name: Prepare build dir
+        run: mkdir build
       - name: Tests
         run: ./gradlew test -x npmInstall --parallel
   build:
