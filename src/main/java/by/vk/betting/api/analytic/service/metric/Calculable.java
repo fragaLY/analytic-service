@@ -2,10 +2,11 @@ package by.vk.betting.api.analytic.service.metric;
 
 import by.vk.betting.api.analytic.dto.analytic.Metric;
 import by.vk.betting.api.analytic.dto.exposed.ExposedResponse;
-import reactor.core.publisher.Flux;
+
+import java.util.List;
 
 public interface Calculable {
-  Metric calculate(Flux<ExposedResponse> dataset);
+  Metric calculate(List<ExposedResponse> dataset);
 
   String getMetricName();
 }

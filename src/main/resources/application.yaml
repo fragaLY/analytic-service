@@ -47,9 +47,9 @@ betting:
     timeout: 10000
     max-attempts: 5
     duration: 1
-    baseurl: "http://3.123.232.146:8000/soccer"
+    baseurl: "http://ec2-3-123-232-146.eu-central-1.compute.amazonaws.com:8000"
     segments:
-      - "/2000"
-      - "/2001"
+      - "/soccer/2000"
+      - "/soccer/2001"
   spark:
     appName: "analytic-service"
