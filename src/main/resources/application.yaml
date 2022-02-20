@@ -28,24 +28,6 @@ spring:
   lifecycle:
     timeout-per-shutdown-phase: 30s
 
-management:
-  health:
-    livenessstate:
-      enabled: true
-    readinessstate:
-      enabled: true
-  endpoint:
-    health:
-      enabled: true
-      probes:
-        enabled: true
-      show-components: never
-      show-details: never
-    metrics.enabled: true
-    prometheus.enabled: true
-  endpoints.web.exposure.include: "*"
-  metrics.export.prometheus.enabled: true
-
 logging.level:
   ROOT: info
   by.vk.sample.service: info

@@ -13,11 +13,9 @@ import java.util.Map;
 import static org.springframework.http.HttpStatus.OK;
 
 @RequestMapping("/api/teams")
-@Validated
 public interface Api {
 
   @GetMapping("/aggregate")
-  @CrossOrigin(origins = {"http://localhost:3000", "http://localhost:80"})
   @ResponseStatus(OK)
   ResponseEntity<Map<String, Metric>> get();
 }

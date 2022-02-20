@@ -11,8 +11,6 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import javax.validation.ConstraintViolation;
-import javax.validation.ConstraintViolationException;
 import java.util.stream.Collectors;
 
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
@@ -65,14 +63,4 @@ public class CommonExceptionHandler {
     return new ExceptionInformation(BAD_REQUEST, BAD_REQUEST.value(), exception.getMessage());
   }
 
-  @ExceptionHandler(value = {ConstraintViolationException.class})
-  @ResponseStatus(value = BAD_REQUEST)
-  public ExceptionInformation handleConstraintViolationException(
-      ConstraintViolationException exception) {
-    var message =
-        exception.getConstraintViolations().stream()
-            .map(ConstraintViolation::getMessage)
-            .collect(Collectors.joining(", "));
-    return new ExceptionInformation(BAD_REQUEST, BAD_REQUEST.value(), message);
-  }
 }

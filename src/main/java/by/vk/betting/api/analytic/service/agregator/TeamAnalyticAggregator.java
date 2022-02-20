@@ -5,7 +5,6 @@ import by.vk.betting.api.analytic.dto.analytic.TeamAnalyticResult;
 import by.vk.betting.api.analytic.dto.exposed.ExposedResponse;
 import org.springframework.stereotype.Component;
 
-import javax.validation.constraints.NotNull;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
@@ -14,7 +13,7 @@ public record TeamAnalyticAggregator(ResponseToTeamAnalyticConvertor convertor)
         implements Function<ExposedResponse, Stream<TeamAnalyticResult>> {
 
   @Override
-  public Stream<TeamAnalyticResult> apply(@NotNull(message = "The exposed response should be exist.") ExposedResponse response) {
+  public Stream<TeamAnalyticResult> apply(ExposedResponse response) {
     return Stream.of(convertor.convert(response), convertor.revers(response));
   }
 }
