@@ -1,6 +1,10 @@
 server:
   port: 80
   shutdown: graceful
+  undertow:
+    threads:
+      worker: 16
+      io: 2
   servlet:
     session:
       timeout: 60m
@@ -34,6 +38,29 @@ logging.level:
   org.springframework: info
   reactor.netty.http.client: error
 
+management:
+  health:
+    livenessstate:
+      enabled: true
+    readinessstate:
+      enabled: true
+    db:
+      enabled: true
+  endpoint:
+    health:
+      enabled: true
+      probes:
+        enabled: true
+      show-components: never
+      show-details: never
+      group:
+        readiness:
+          include: readinessState, db
+    metrics.enabled: true
+    prometheus.enabled: true
+  endpoints.web.exposure.include: "*"
+  metrics.export.prometheus.enabled: true
+
 springdoc:
   show-actuator: true
   api-docs:
@@ -44,12 +71,10 @@ springdoc:
 betting:
   webclient:
     enabled: true
-    timeout: 10000
+    timeout: 5000
     max-attempts: 5
     duration: 1
-    baseurl: "http://3.123.232.146:8000/soccer"
+    baseurl: "http://ec2-3-123-232-146.eu-central-1.compute.amazonaws.com:8000/soccer"
     segments:
       - "/2000"
       - "/2001"
-  spark:
-    appName: "analytic-service"
