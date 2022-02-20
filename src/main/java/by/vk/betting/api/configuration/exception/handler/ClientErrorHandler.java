@@ -1,4 +1,4 @@
-package by.vk.betting.api.configuration.exception.function;
+package by.vk.betting.api.configuration.exception.handler;
 
 import by.vk.betting.api.configuration.exception.types.UnexpectedException;
 import org.springframework.stereotype.Component;
@@ -8,7 +8,7 @@ import reactor.core.publisher.Mono;
 import java.util.function.Function;
 
 @Component
-public class ClientErrorFunction implements Function<ClientResponse, Mono<? extends Throwable>> {
+public class ClientErrorHandler implements Function<ClientResponse, Mono<? extends Throwable>> {
 
   @Override
   public Mono<? extends Throwable> apply(ClientResponse response) {

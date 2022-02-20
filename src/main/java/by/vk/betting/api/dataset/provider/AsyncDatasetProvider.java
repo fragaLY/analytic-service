@@ -2,7 +2,7 @@ package by.vk.betting.api.dataset.provider;
 
 import by.vk.betting.api.analytic.dto.exposed.ExposedResponse;
 import by.vk.betting.api.configuration.client.properties.WebClientProperties;
-import by.vk.betting.api.configuration.exception.function.ClientErrorFunction;
+import by.vk.betting.api.configuration.exception.handler.ClientErrorHandler;
 import by.vk.betting.api.configuration.exception.types.NotFoundException;
 import org.apache.logging.log4j.util.Strings;
 import org.slf4j.Logger;
@@ -17,12 +17,12 @@ import reactor.util.retry.RetryBackoffSpec;
 public record AsyncDatasetProvider(WebClientProperties properties,
                                    WebClient client,
                                    RetryBackoffSpec retrySpec,
-                                   ClientErrorFunction clientErrorFunction) {
+                                   ClientErrorHandler clientErrorFunction) {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AsyncDatasetProvider.class);
 
     public Flux<ExposedResponse> provide() {
-        LOGGER.info("[DATASET PROVIDER] Providing datasets for segments [{}]", properties.segments());
+        LOGGER.info("[ASYNC DATASET PROVIDER] Providing datasets for segments [{}]", properties.segments());
         return properties.segments().parallelStream()
                 .map(segment -> client.get().uri(String.join(Strings.EMPTY, segment)))
                 .map(spec -> spec.retrieve().onStatus(HttpStatus::isError, clientErrorFunction))
