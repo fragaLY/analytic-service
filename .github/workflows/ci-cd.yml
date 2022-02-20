@@ -16,10 +16,7 @@ jobs:
           distribution: 'adopt'
           architecture: x64
       - name: Tests
-        run: |
-          pwd;\
-          mkdir build;\
-          chmod +x gradlew;\
+        run: chmod +x gradlew &&\
           ./gradlew test -x npmInstall --parallel;
   build:
     runs-on: ubuntu-latest
@@ -34,5 +31,4 @@ jobs:
       - name: Build
         if: github.ref == 'refs/heads/master'
         run: chmod +x gradlew &&\
-          mkdir build &&\
           ./gradlew clean jib -x test -Djib.to.image=${{ secrets.DOCKER_HUB_REGISTRY }}/${{ secrets.DOCKER_HUB_USER }}/analytic-service:latest -Djib.to.auth.username=${{ secrets.DOCKER_HUB_USER }} -Djib.to.auth.password=${{ secrets.DOCKER_HUB_PASSWORD }}
