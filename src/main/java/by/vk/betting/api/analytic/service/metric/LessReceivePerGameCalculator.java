@@ -13,6 +13,7 @@ import org.springframework.stereotype.Component;
 import reactor.core.publisher.Flux;
 
 import java.util.Comparator;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Component
@@ -26,13 +27,18 @@ public record LessReceivePerGameCalculator(TeamAnalyticAggregator aggregator,
         LOGGER.info("[METRICS] Calculating less received per game team(s)");
         var result = dataset
                 .toStream()
+                .parallel()
                 .filter(responsePredicate)
                 .flatMap(aggregator)
                 .collect(Collectors.groupingBy(TeamAnalyticResult::teamKey))
                 .entrySet()
-                .stream()
+                .parallelStream()
                 .map(counter)
-                .min(Comparator.comparingDouble(Metric::amount))
+                .collect(Collectors.toMap(Metric::amount, Metric::team, (firstTeam, secondTeam) -> String.format("%s, %s", firstTeam, secondTeam)))
+                .entrySet()
+                .parallelStream()
+                .min(Map.Entry.comparingByKey(Comparator.naturalOrder()))
+                .map(it -> new Metric(it.getValue(), it.getKey()))
                 .orElseThrow(() -> new NotFoundException("Less received per game team not found"));
         LOGGER.info("[METRICS] Less received per game team(s) are [{}]", result);
         return result;

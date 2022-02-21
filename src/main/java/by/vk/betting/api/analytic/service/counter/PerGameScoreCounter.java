@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
@@ -20,11 +21,11 @@ public class PerGameScoreCounter
   public Metric apply(Map.Entry<String, List<TeamAnalyticResult>> entry) {
     LOGGER.debug("[METRICS] Calculating per game scored metric for [{}]", entry.getKey());
     var analytics = entry.getValue();
-    var scored = analytics.stream().mapToInt(TeamAnalyticResult::teamScore).sum();
+    var scored = analytics.parallelStream().mapToInt(TeamAnalyticResult::teamScore).sum();
     var games = analytics.size();
     var name = analytics.get(ZERO).teamName();
     var amount = scored == ZERO ? ZERO : (double) scored / games;
-    var metric = new Metric(name, amount);
+    var metric = new Metric(name, BigDecimal.valueOf(amount));
     LOGGER.debug("[METRICS] Per game scored metric for [{}] is [{}]", entry.getKey(), metric);
     return metric;
   }
